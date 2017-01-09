@@ -70,7 +70,7 @@
 						layerConstraint: "NONE",
 						layoutHierarchy: false,
 						linearSegmentsDeflectionDampening: 0.3,
-						mergeEdges: false,
+						mergeEdges: true,
 						mergeHierarchyCrossingEdges: true,
 						noLayout: false,
 						nodeLabelPlacement: "H_LEFT",
@@ -128,18 +128,24 @@
 							{ data: { id: 'j', name: 'Jerry' } },
 							{ data: { id: 'e', name: 'Elaine' } },
 							{ data: { id: 'k', name: 'Kramer' } },
-							{ data: { id: 'g', name: 'George' } }
+							{ data: { id: 'g', name: 'George' } },
+							{ data: { id: 'f', name: 'fafafa' } }
 						],
 						edges: [
 							{ data: { source: 'j', target: 'e' } },
 							{ data: { source: 'j', target: 'k' } },
 							{ data: { source: 'j', target: 'g' } },
+							{ data: { source: 'e', target: 'g' } },
 							{ data: { source: 'e', target: 'j' } },
 							{ data: { source: 'e', target: 'k' } },
 							{ data: { source: 'k', target: 'j' } },
 							{ data: { source: 'k', target: 'e' } },
 							{ data: { source: 'k', target: 'g' } },
-							{ data: { source: 'g', target: 'j' } }
+							{ data: { source: 'g', target: 'j' } },
+							{ data: { source: 'f', target: 'j' } },
+							{ data: { source: 'f', target: 'e' } },
+							{ data: { source: 'f', target: 'g' } },
+							{ data: { source: 'f', target: 'k' } },
 						]
 					},
 				});

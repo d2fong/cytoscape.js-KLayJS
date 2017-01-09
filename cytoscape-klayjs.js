@@ -98,7 +98,6 @@
               var j = 0;
               for(j in temp){
                 if(j === i){
-                  console.log("optionsOut[" + temp[j] + "]" + " = " + options[i]);
                   optionsOut[temp[j]] = options[i];
                 }
               }
