@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Graph Sandbox</title>
+  <script type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="cytoscape-klayjs.js"></script>
+  <script type="text/javascript" src="node_modules/klayjs/klay.js"></script>
+  <script src="code.js"></script>
+
+
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type = "text/css" href="style.css"/>
+</head>
+<body>
+  <div id="cy"></div>
+
+  <div id="side" class="scroll">
+    <h1 id="hSide">Options</h1>
+
+
+    <div class="panel panel-default panel-side">
+      <div class="panel-heading">
+        <h1 class="panel-title">
+          <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+          <b>Manage Nodes</b>
+        </h1>
+      </div>
+      <div class="panel-group" id="manageNodesAccordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingAddNode">
+            <h4 class="panel-title">
+              <a class="collapsed"role="button" data-toggle="collapse" data-parent="#manageNodesAccordion" href="#collapseAddNode" aria-expanded="true" aria-controlls="collapseAddNode">
+                Add Node
+              </a>
+            </h4>
+          </div>
+          <div id="collapseAddNode" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingAddNode">
+            <div class="panel-body">
+              <input id="newNodeInput" class="field-side" placeholder="New Node Name">
+              <br />
+              <button class="btn btn-default">Cancel</button>
+              <button class="btn btn-primary" onclick="addNode()">Confirm</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingRemoveNode">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#manageNodesAccordion" href="#collapseRemoveNode" aria-expanded="false" aria-controlls="collapseRemoveNode">
+                Remove Node
+              </a>
+            </h4>
+          </div>
+          <div id="collapseRemoveNode" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingRemoveNode">
+            <div class="panel-body">
+              <input id="remNodeInput" class="field-side" placeholder="Remove Node Name"
+              <br />
+              <button class="btn btn-default">Cancel</button>
+              <button class="btn btn-danger" onclick="removeNode()">Confirm</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingAddEdge">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#manageNodesAccordion" href="#collapseAddEdge" aria-expanded="false" aria-controlls="collapseAddEdge">
+                Add Edge
+              </a>
+            </h4>
+          </div>
+          <div id="collapseAddEdge" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingAddEdge">
+            <div class="panel-body">
+              <input id="newEdgeInput" class="field-side" placeholder="New Edge Name">
+              <input id="newSourceInput" class="field-side" placeholder="Edge Source">
+              <input id="newTargetInput" class="field-side" placeholder="Edge Target">
+              <br />
+              <button class="btn btn-default">Cancel</button>
+              <button class="btn btn-primary" onclick="addEdge()">Confirm</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingRemoveEdge">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#manageNodesAccordion" href="#collapseRemoveEdge" aria-expanded="false" aria-controlls="collapseRemoveEdge">
+                Remove Edge
+              </a>
+            </h4>
+          </div>
+          <div id="collapseRemoveEdge" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingRemoveEdge">
+            <div class="panel-body">
+              <input id="remEdgeInput" class="field-side" placeholder="Remove Edge Name"
+              <br />
+              <button class="btn btn-default">Cancel</button>
+              <button class="btn btn-danger" onclick="removeEdge()">Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="panel panel-default panel-side">
+      <div class="panel-heading">
+        <h1 class="panel-title">
+          <span class="glyphicon glyphicon glyphicon-th" aria-hidden="true"></span>
+          <b>Layouts</b>
+        </h1>
+      </div>
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingRandom">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseRandom" aria-expanded="true" aria-controlls="collapseRandom">
+                Random
+              </a>
+            </h4>
+          </div>
+          <div id="collapseRandom" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingRandom">
+            <div class="panel-body">
+              <button class = "btn btn-success" onclick="setLayout('random')">Random</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingCose">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseCose" aria-expanded="false" aria-controlls="collapseCose">
+                Cose
+              </a>
+            </h4>
+          </div>
+          <div id="collapseCose" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingCose">
+            <div class="panel-body">
+              <button class = "btn btn-success" onclick="setLayout('cose')">Cose</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingKLayJS">
+            <h4 class="panel-title">
+              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseKLayJS" aria-expanded="false" aria-controlls="collapseKLayJS">
+                KLayJS
+              </a>
+            </h4>
+          </div>
+          <div id="collapseKLayJS" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingKLayJS">
+            <div class="panel-body">
+              <button class = "btn btn-success" onclick="setLayout('klayjs')">KLayJS</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

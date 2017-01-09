@@ -32,11 +32,144 @@
       var cy = options.cy;
       var eles = options.eles;
       var nodes = eles.nodes();
+      var edges = eles.edges();
 
-      var getRandomPos = function( i, ele ){
+      var positions = [];
+
+      (function klayinit(){
+        var properties = function(){
+          var temp = {
+            "addUnnecessaryBendpoints": "de.cau.cs.kieler.klay.layered.unnecessaryBendpoints",
+            "alignment": "de.cau.cs.kieler.alignment",
+            "aspectRatio": "de.cau.cs.kieler.aspectRatio",
+						"borderSpacing": "borderSpacing",
+						"compactComponents": "de.cau.cs.kieler.klay.layered.components.compact",
+						"compactionStrategy": "de.cau.cs.kieler.klay.layered.nodeplace.compactionStrategy",
+						"contentAlignment": "de.cau.cs.kieler.klay.layered.contentAlignment",
+						"crossingMinimization": "de.cau.cs.kieler.klay.layered.crossMin",
+						"cycleBreaking": "de.cau.cs.kieler.klay.layered.cycleBreaking",
+						"debugMode": "de.cau.cs.kieler.debugMode",
+						"direction": "de.cau.cs.kieler.direction",
+						"edgeLabelSideSelection": "de.cau.cs.kieler.klay.layered.edgeLabelSideSelection",
+						// <broken> "de.cau.cs.kieler.klay.layered.edgeNodeSpacingFactor": options.edgeNodeSpacingFactor,
+						"edgeRouting": "de.cau.cs.kieler.edgeRouting",
+						"edgeSpacingFactor": "de.cau.cs.kieler.klay.layered.edgeSpacingFactor",
+						"feedbackEdges": "de.cau.cs.kieler.klay.layered.feedBackEdges",
+						"fixedAlignment": "de.cau.cs.kieler.klay.layered.fixedAlignment",
+						"greedySwitchCrossingMinimization": "de.cau.cs.kieler.klay.layered.greedySwitch",
+						"hierarchyHandling": "de.cau.cs.kieler.hierarchyHandling",
+						"inLayerSpacingFactor": "de.cau.cs.kieler.klay.layered.inLayerSpacingFactor",
+						"interactiveReferencePoint": "de.cau.cs.kieler.klay.layered.interactiveReferencePoint",
+						"layerConstraint": "de.cau.cs.kieler.klay.layered.layerConstraint",
+						"layoutHierarchy": "de.cau.cs.kieler.layoutHierarchy",
+						"linearSegmentsDeflectionDampening": "de.cau.cs.kieler.klay.layered.linearSegmentsDeflectionDampening",
+						"mergeEdges": "de.cau.cs.kieler.klay.layered.mergeEdges",
+						"mergeHierarchyCrossingEdges": "de.cau.cs.kieler.klay.layered.mergeHierarchyEdges",
+						"noLayout": "de.cau.cs.kieler.noLayout",
+						"nodeLabelPlacement": "de.cau.cs.kieler.nodeLabelPlacement",
+						"nodeLayering": "de.cau.cs.kieler.klay.layered.nodeLayering",
+						"nodePlacement": "de.cau.cs.kieler.klay.layered.nodePlace",
+						"portAlignment": "de.cau.cs.kieler.portAlignment",
+						"portAlignmentEastern": "de.cau.cs.kieler.portAlignment.east",
+						"portAlignmentNorth": "de.cau.cs.kieler.portAlignment.north",
+						"portAlignmentSouth": "de.cau.cs.kieler.portAlignment.south",
+						"portAlignmentWest": "de.cau.cs.kieler.portAlignment.west",
+						"portConstraints": "de.cau.cs.kieler.portConstraints",
+						"portLabelPlacement": "de.cau.cs.kieler.portLabelPlacement",
+						"portOffset": "de.cau.cs.kieler.offset",
+						"portSide": "de.cau.cs.kieler.portSide",
+						"portSpacing": "de.cau.cs.kieler.portSpacing",
+						"postCompaction": "de.cau.cs.kieler.klay.layered.postCompaction",
+						"priority": "de.cau.cs.kieler.priority",
+						"randomizationSeed": "de.cau.cs.kieler.randomSeed",
+						"routeSelfLoopInside": "de.cau.cs.kieler.selfLoopInside",
+						"separateConnectedComponents": "de.cau.cs.kieler.separateConnComp",
+						"sizeConstraint": "de.cau.cs.kieler.sizeConstraint",
+						"sizeOptions": "de.cau.cs.kieler.sizeOptions",
+						"spacing": "de.cau.cs.kieler.spacing",
+						"splineSelfLoopPlacement": "de.cau.cs.kieler.klay.layered.splines.selfLoopPlacement",
+						"thoroughness": "de.cau.cs.kieler.klay.layered.thoroughness",
+						"wideNodesOnMultipleLayers": "de.cau.cs.kieler.klay.layered.wideNodesOnMultipleLayers"
+          };
+          var optionsOut = {};
+          var i = 0;
+          for(i in options){
+            if(options[i] !== 'undefined'){
+              var j = 0;
+              for(j in temp){
+                if(j === i){
+                  console.log("optionsOut[" + temp[j] + "]" + " = " + options[i]);
+                  optionsOut[temp[j]] = options[i];
+                }
+              }
+            }
+          }
+          return optionsOut;
+        };
+
+        var children = function(){
+          var temp = [];
+          var i;
+          for(i = 0; i < nodes.length; i++){
+            temp[i] = {
+              "id": nodes[i].data().id,
+              "width": 4,
+              "height": 4
+            };
+          }
+          return temp;
+        };
+
+        var kedges = function(){
+          var temp = [];
+          var i;
+          for(i = 0; i < edges.length; i++){
+            temp[i] ={
+              "id": edges[i].data().id,
+              "source": edges[i].data().source,
+              "target": edges[i].data().target
+            }
+          }
+          return temp;
+        };
+        var graph = {
+          "id": "root",
+          properties: properties(),
+          "children": children(),
+          "edges": kedges()
+        };
+
+        $klay.layout({
+          graph:graph,
+          options:{
+            spacing: 50
+          },
+          success: function(layouted){
+            console.log(layouted);
+          },
+          error: function(){
+            console.log(error);
+          }
+
+        });
+
+        var i;
+        //var positions;
+        for(i=0; i < graph.children.length; i++){
+          positions[i] = {
+            "id": graph.children[i].id,
+            "x": graph.children[i].x,
+            "y": graph.children[i].y
+          };
+        }
+      })();
+
+      console.log(positions[0]);
+
+      var getPos = function( i, ele ){
         return {
-          x: Math.round( Math.random() * 100 ),
-          y: Math.round( Math.random() * 100 )
+          x: positions[i].x/*Math.round( Math.random() * 100 )*/,
+          y: positions[i].y/*Math.round( Math.random() * 100 )*/
         };
       };
 
@@ -47,7 +180,7 @@
       // - animate
       // - animationDuration
       // - animationEasing
-      nodes.layoutPositions( layout, options, getRandomPos );
+      nodes.layoutPositions( layout, options, getPos );
 
       return this; // or...
 
