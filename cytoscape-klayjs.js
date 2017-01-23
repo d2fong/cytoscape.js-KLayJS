@@ -110,11 +110,32 @@
           var temp = [];
           var i;
           for(i = 0; i < nodes.length; i++){
-            temp[i] = {
-              "id": nodes[i].data().id,
-              "width": 4,
-              "height": 4
-            };
+            console.log("boop");
+            if(nodes[i].data().parent === undefined){
+              temp.push({
+                "id": nodes[i].data().id,
+                "width": 4,
+                "height": 4,
+                "children": [],
+              });
+            }else{
+              console.log("beep");
+              var j;
+              for(j = 0; j < temp.length; j++){
+                console.log(temp[j].id);
+                console.log(nodes[i].data().parent);
+                if(temp[j].id === nodes[i].data().parent){
+                  console.log("bing");
+                  temp[j].children.push({
+                    "id": nodes[i].data().id,
+                    "width": 4,
+                    "height": 4,
+                    "children": []
+                  });
+                  console.log(temp[j].children);
+                }
+              }
+            }
           }
           return temp;
         };
@@ -152,24 +173,59 @@
 
         });
 
-        var i;
-        //var positions;
-        for(i=0; i < graph.children.length; i++){
-          positions[i] = {
-            "id": graph.children[i].id,
-            "x": graph.children[i].x,
-            "y": graph.children[i].y
-          };
+        function recordPositions(nodesIn){
+          var i;
+          for(i=0; i < nodesIn.length; i++){
+            positions.push({
+              "id": nodesIn[i].id,
+              "x": nodesIn[i].x,
+              "y": nodesIn[i].y
+            });
+            console.log("ping");
+            if(nodesIn[i].children !== undefined){
+              console.log("pong");
+              recordPositions(nodesIn[i].children);
+            }
+          }
         }
+
+        recordPositions(graph.children);
+
       })();
 
-      console.log(positions[0]);
+      console.log("POSITIONED ELEMENTS");
+      var i;
+      for(i= 0; i < positions.length; i++){
+        console.log(positions[i]);
+      }
 
       var getPos = function( i, ele ){
-        return {
-          x: positions[i].x/*Math.round( Math.random() * 100 )*/,
-          y: positions[i].y/*Math.round( Math.random() * 100 )*/
-        };
+        var j = 0;
+        for(j = 0; j < positions.length; j++){
+          if(positions[j].id === ele.data().id){
+            return {
+              x: positions[i].x,
+              y: positions[i].y
+            };
+          }
+        }
+        /*if(ele.data().parent === undefined){
+          return {
+            x: positions[i].x,
+            y: positions[i].y
+          };
+        }else{
+          var j;
+          for(j = 0; j < temp.length; j++){
+            if(temp[j].id === nodes[i].data().parent){
+              temp[j].children.push({
+                "id": nodes[i].data().id,
+                "width": 4,
+                "height": 4
+              });
+            }
+          }
+        }*/
       };
 
       // dicrete/synchronous layouts can just use this helper and all the
@@ -188,7 +244,7 @@
       // better performance if your algorithm allows for it)
 
       var thread = this.thread = cytoscape.thread();
-      thread.require( getRandomPos, 'getRandomPos' );
+      thread.require( getPos, 'getPos' );
 
       // to indicate we've started
       layout.trigger('layoutstart');
