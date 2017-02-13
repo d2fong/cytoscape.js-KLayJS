@@ -91,6 +91,7 @@
 						"thoroughness": "de.cau.cs.kieler.klay.layered.thoroughness",
 						"wideNodesOnMultipleLayers": "de.cau.cs.kieler.klay.layered.wideNodesOnMultipleLayers"
           };
+          // to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion
           var optionsOut = {};
           var i = 0;
           for(i in options){
@@ -108,9 +109,7 @@
 
         var children = function(){
           var temp = [];
-          var i;
-          for(i = 0; i < nodes.length; i++){
-            console.log("boop");
+          for(var i = 0; i < nodes.length; i++){
             if(nodes[i].data().parent === undefined){
               temp.push({
                 "id": nodes[i].data().id,
@@ -119,20 +118,15 @@
                 "children": [],
               });
             }else{
-              console.log("beep");
               var j;
               for(j = 0; j < temp.length; j++){
-                console.log(temp[j].id);
-                console.log(nodes[i].data().parent);
                 if(temp[j].id === nodes[i].data().parent){
-                  console.log("bing");
                   temp[j].children.push({
                     "id": nodes[i].data().id,
                     "width": 4,
                     "height": 4,
                     "children": []
                   });
-                  console.log(temp[j].children);
                 }
               }
             }
@@ -152,6 +146,7 @@
           }
           return temp;
         };
+
         var graph = {
           "id": "root",
           properties: properties(),
@@ -165,25 +160,22 @@
             spacing: 50
           },
           success: function(layouted){
-            console.log(layouted);
+            //console.log(layouted);
           },
           error: function(){
-            console.log(error);
+            //console.log(error);
           }
 
         });
 
         function recordPositions(nodesIn){
-          var i;
-          for(i=0; i < nodesIn.length; i++){
+          for(var i=0; i < nodesIn.length; i++){
             positions.push({
               "id": nodesIn[i].id,
               "x": nodesIn[i].x,
               "y": nodesIn[i].y
             });
-            console.log("ping");
             if(nodesIn[i].children !== undefined){
-              console.log("pong");
               recordPositions(nodesIn[i].children);
             }
           }
@@ -191,13 +183,24 @@
 
         recordPositions(graph.children);
 
-      })();
+        function recordEdges(edgesIn){
+          for(var i = 0; i < edgesIn.length; i++){
+            //console.log(edgesIn);
+            if(edgesIn[i].bendPoints !== undefined){
+              //console.log(edgesIn[i]);
+              for(var j = 0; j < edges.length; j++){
+                //console.log(edges[j].data().id);
+                //console.log(edgesIn[i].id);
+                if(edges[j].data().id === edgesIn[i].id){
+                  edges[j].rscratch = edgesIn[i].bendPoints;
+                }
+              }
+            }
+          }
+        }
+        recordEdges(graph.edges);
 
-      console.log("POSITIONED ELEMENTS");
-      var i;
-      for(i= 0; i < positions.length; i++){
-        console.log(positions[i]);
-      }
+      })();
 
       var getPos = function( i, ele ){
         var j = 0;
@@ -227,14 +230,6 @@
           }
         }*/
       };
-
-      // dicrete/synchronous layouts can just use this helper and all the
-      // busywork is handled for you, including std opts:
-      // - fit
-      // - padding
-      // - animate
-      // - animationDuration
-      // - animationEasing
       nodes.layoutPositions( layout, options, getPos );
 
       return this; // or...
