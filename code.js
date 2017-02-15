@@ -142,6 +142,10 @@ function setLayout(nameIn, args){
   }else if(nameIn === 'matterjs'){
     options = {
       name: 'matterjs',
+      //clusters: [{nodes: ['a0', 'b0', 'c0', 'd0', 'e0', 'f0', 'g0', 'h0', 'i0', 'j0', 'k0', 'l0', 'm0', 'n0', 'o0', 'p0', 'q0', 'r0', 's0', 't0', 'u0', 'v0', 'w0', 'x0', 'y0', 'z0' ], distanceFromCluster: 0, elasticityToCluster: 1}],
+      tickTimeout:1000,
+      gravity: -1000,
+      //mass: [{id: 'a0', mass: 400}],
     }
   }
   cy.layout(options);
