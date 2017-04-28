@@ -107,6 +107,7 @@
           return optionsOut;
         };
 
+        // TODO lazy create parents (see paper)
         var children = function(){
           var temp = [];
           for(var i = 0; i < nodes.length; i++){
