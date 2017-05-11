@@ -1,7 +1,7 @@
 ;(function(){ 'use strict';
 
   // registers the extension on a cytoscape lib ref
-  var register = function( cytoscape ){
+  var register = function( cytoscape, klay ){
 
     if( !cytoscape ){ return; } // can't register if cytoscape unspecified
 
@@ -38,7 +38,7 @@
 
       (function klayinit(){
         var properties = function(){
-          var temp = {
+          var defaults = {
             "addUnnecessaryBendpoints": "de.cau.cs.kieler.klay.layered.unnecessaryBendpoints",
             "alignment": "de.cau.cs.kieler.alignment",
             "aspectRatio": "de.cau.cs.kieler.aspectRatio",
@@ -91,15 +91,14 @@
 						"thoroughness": "de.cau.cs.kieler.klay.layered.thoroughness",
 						"wideNodesOnMultipleLayers": "de.cau.cs.kieler.klay.layered.wideNodesOnMultipleLayers"
           };
-          // to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion you must learn how to understand recursion
           var optionsOut = {};
           var i = 0;
           for(i in options){
             if(options[i] !== 'undefined'){
               var j = 0;
-              for(j in temp){
+              for(j in defaults){
                 if(j === i){
-                  optionsOut[temp[j]] = options[i];
+                  optionsOut[defaults[j]] = options[i];
                 }
               }
             }
@@ -155,7 +154,7 @@
           "edges": kedges()
         };
 
-        $klay.layout({
+        klay.layout({
           graph:graph,
           options:{
             spacing: 50
@@ -357,7 +356,7 @@
   };
 
   if( typeof module !== 'undefined' && module.exports ){ // expose as a commonjs module
-    module.exports = register;
+    module.exports = register( cytoscape, klay || require('klayjs'));
   }
 
   if( typeof define !== 'undefined' && define.amd ){ // expose as an amd/requirejs module
@@ -367,7 +366,7 @@
   }
 
   if( typeof cytoscape !== 'undefined' ){ // expose to global cytoscape (i.e. window.cytoscape)
-    register( cytoscape );
+    register( cytoscape, klay );
   }
 
 })();

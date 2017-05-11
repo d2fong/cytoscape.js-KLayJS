@@ -33,5 +33,8 @@
   },
   "peerDependencies": {
     "cytoscape": "^2.7.0"
+  },
+  "dependencies": {
+    "klayjs": "^0.4.1"
   }
 }
