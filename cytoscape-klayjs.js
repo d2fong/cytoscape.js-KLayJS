@@ -37,7 +37,7 @@
       var positions = [];
 
       (function klayinit(){
-        var properties = function(){
+        var properties = function (opts) {
           var defaults = {
             "addUnnecessaryBendpoints": "de.cau.cs.kieler.klay.layered.unnecessaryBendpoints",
             "alignment": "de.cau.cs.kieler.alignment",
@@ -93,12 +93,12 @@
           };
           var optionsOut = {};
           var i = 0;
-          for(i in options){
-            if(options[i] !== 'undefined'){
+          for(i in opts){
+            if(opts[i] !== 'undefined'){
               var j = 0;
               for(j in defaults){
                 if(j === i){
-                  optionsOut[defaults[j]] = options[i];
+                  optionsOut[defaults[j]] = opts[i];
                 }
               }
             }
@@ -107,21 +107,21 @@
         };
 
         // TODO lazy create parents (see paper)
-        var children = function(){
-          var temp = [];
-          for(var i = 0; i < nodes.length; i++){
-            if(nodes[i].data().parent === undefined){
-              temp.push({
+        var klayChildren = function (nodes) {
+          var children = [];
+          for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].data().parent === undefined) {
+              children.push({
                 "id": nodes[i].data().id,
                 "width": 4,
                 "height": 4,
                 "children": [],
               });
-            }else{
+            } else {
               var j;
-              for(j = 0; j < temp.length; j++){
-                if(temp[j].id === nodes[i].data().parent){
-                  temp[j].children.push({
+              for(j = 0; j < children.length; j++){
+                if(children[j].id === nodes[i].data().parent){
+                  children[j].children.push({
                     "id": nodes[i].data().id,
                     "width": 4,
                     "height": 4,
@@ -131,14 +131,14 @@
               }
             }
           }
-          return temp;
+          return children;
         };
 
-        var kedges = function(){
+        var klayEdges = function (edges){
           var temp = [];
           var i;
           for(i = 0; i < edges.length; i++){
-            temp[i] ={
+            temp[i] = {
               "id": edges[i].data().id,
               "source": edges[i].data().source,
               "target": edges[i].data().target
@@ -149,26 +149,25 @@
 
         var graph = {
           "id": "root",
-          properties: properties(),
-          "children": children(),
-          "edges": kedges()
+          properties: properties(this.options),
+          "children": klayChildren(nodes),
+          "edges": klayEdges(edges)
         };
 
         klay.layout({
-          graph:graph,
-          options:{
+          graph: graph,
+          options: {
             spacing: 50
           },
-          success: function(layouted){
+          success: function (layouted) {
             //console.log(layouted);
           },
           error: function(){
             //console.log(error);
           }
-
         });
 
-        function recordPositions(nodesIn){
+        function recordPositions (nodesIn) {
           for(var i=0; i < nodesIn.length; i++){
             positions.push({
               "id": nodesIn[i].id,
