@@ -9,6 +9,7 @@ module.exports = {
             "error",
             2
         ],
+        "no-redeclare": "off",
         "linebreak-style": [
             "error",
             "unix"
